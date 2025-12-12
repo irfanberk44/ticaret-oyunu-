@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekonomi Oyunu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #87CEEB;
+            text-align: center;
+            color: white;
+        }
+        #status {
+            background-color: #333;
+            padding: 10px;
+            margin: 20px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: yellow;
+        }
+        .inputBox {
+            padding: 8px;
+            font-size: 16px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ekonomi Simülasyonu Oyunu</h1>
+
+    <div id="status">
+        <p>Para: <span id="money">1000</span> $</p>
+        <p>Borcunuz: <span id="debt">0</span> $</p>
+    </div>
+
+    <button id="earnMoney">Hesabınıza Para Geliyor!</button>
+    <br>
+
+    <button id="buyBuilding">Bina Satın Al</button>
+    <br>
+
+    <button id="bank">Banka - Borç Al</button>
+    <br>
+
+    <button id="negotiate">Pazarlık Yap</button>
+
+    <div id="message"></div>
+
+    <script>
+        // Global Değişkenler
+        let playerMoney = 1000;
+        let playerDebt = 0;
+        let buildingPrice = 500;
+        let botPrice = 300;
+
+        // Para ekleme fonksiyonu
+        document.getElementById("earnMoney").onclick = function() {
+            let randomAmount = Math.floor(Math.random() * 500) + 100; // 100-600 arası rastgele para
+            playerMoney += randomAmount;
+            document.getElementById("money").innerText = playerMoney;
+            document.getElementById("message").innerText = `${randomAmount} $ hesabınıza eklendi!`;
+        };
+
+        // Bina satın alma fonksiyonu
+        document.getElementById("buyBuilding").onclick = function() {
+            if (playerMoney >= buildingPrice) {
+                playerMoney -= buildingPrice;
+                document.getElementById("money").innerText = playerMoney;
+                document.getElementById("message").innerText = `Bina başarıyla satın alındı!`;
+            } else {
+                document.getElementById("message").innerText = `Yeterli paranız yok!`;
+            }
+        };
+
+        // Bankadan borç alma fonksiyonu
+        document.getElementById("bank").onclick = function() {
+            let borrowAmount = parseInt(prompt("Ne kadar borç almak istersiniz?", "500"));
+            if (borrowAmount > 0) {
+                playerMoney += borrowAmount;
+                playerDebt += borrowAmount * 1.1;  // %10 faiz ekleniyor
+                document.getElementById("money").innerText = playerMoney;
+                document.getElementById("debt").innerText = playerDebt.toFixed(2);
+                document.getElementById("message").innerText = `Banka borcu alındı! Yeni borcunuz: ${playerDebt.toFixed(2)} $`;
+            }
+        };
+
+        // Pazarlık yapma fonksiyonu
+        document.getElementById("negotiate").onclick = function() {
+            let playerOffer = parseInt(prompt("Pazarlık teklifi verin (örneğin, 200 $):", "200"));
+            if (playerOffer >= botPrice) {
+                playerMoney -= playerOffer;
+                document.getElementById("money").innerText = playerMoney;
+                document.getElementById("message").innerText = `Ticaret başarılı! Bot'a ${playerOffer} $ ödediniz.`;
+            } else {
+                document.getElementById("message").innerText = `Bot teklifi kabul etmedi!`;
+            }
+        };
+    </script>
+
+</body>
+</html>
